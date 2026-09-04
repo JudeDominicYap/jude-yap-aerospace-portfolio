@@ -27,6 +27,7 @@ import {
   Linkedin,
   Mail,
   Menu,
+  FileText,
   Orbit,
   Plane,
   Plus,
@@ -43,16 +44,26 @@ import {
   Zap,
 } from "lucide-react";
 
-const blueprintAsset = "/manus-storage/jude-yap-aircraft-blueprint_45501cda.png";
-const diagramAsset = "/manus-storage/jude-yap-system-diagram_31fc045f.png";
-const flightPathAsset = "/manus-storage/jude-yap-flight-path_d82297f4.png";
-const brandMark = "/manus-storage/jude-yap-mark_43517ca4.png";
+// Visual assets live in `client/public/images/`. Vite copies `base: "./"` rewrites
+// these to relative paths on build -> resolves correctly on any GitHub Pages URL.
+// If a file is missing the portfolio still renders (fallback decorative
+// SVG/CSS placeholders in index.css keep the visuals intact.
+const blueprintAsset = "/images/aircraft-blueprint.png";
+const diagramAsset = "/images/system-diagram.png";
+const flightPathAsset = "/images/flight-path.png";
+const brandMark = "/images/brand-mark.png";
 const WEB3FORMS_ACCESS_KEY = "479b5cf2-2a42-4b6d-8082-955d5c7c4981";
+// NOTE: Files live in `client/public/certificates/` so Vite copies them to
+// the production build verbatim. Vite's `base: "./"` rewrites these absolute
+// URLs to relative paths during build, so they resolve on GitHub Pages
+// regardless of whether the site is hosted at the root or a repo sub-path.
+// See `client/public/certificates/README.md` for the expected filenames.
 const certificateAssets = {
-  claude: { pdf: "/manus-storage/claude-projects-artifacts_8dc138fa.pdf", thumb: "/manus-storage/claude-projects-artifacts_fb4c211d.png" },
-  modernAi: { pdf: "/manus-storage/introduction-to-modern-ai_fcebe0c5.pdf", thumb: "/manus-storage/introduction-to-modern-ai_06a9dac4.png" },
-  prompt: { pdf: "/manus-storage/prompt-engineering-essentials_08985631.pdf", thumb: "/manus-storage/prompt-engineering-essentials_6a678276.png" },
-  python: { pdf: "/manus-storage/python-essentials-1_f28b5b35.pdf", thumb: "/manus-storage/python-essentials-1_2dc9fbec.png" },
+  claude: { pdf: "/certificates/claude-projects-artifacts.pdf", thumb: "/certificates/claude-projects-artifacts.png" },
+  modernAi: { pdf: "/certificates/introduction-to-modern-ai.pdf", thumb: "/certificates/introduction-to-modern-ai.png" },
+  prompt: { pdf: "/certificates/prompt-engineering-essentials.pdf", thumb: "/certificates/prompt-engineering-essentials.png" },
+  python: { pdf: "/certificates/python-essentials-1.pdf", thumb: "/certificates/python-essentials-1.png" },
+  future: { pdf: "/certificates/ai-career-readiness.pdf", thumb: "/certificates/ai-career-readiness.png" },
 };
 
 const navItems = [
@@ -560,7 +571,7 @@ export default function Home() {
 
       {selectedProject && <div className="modal-backdrop" role="presentation" onClick={closeProject}><div ref={projectModalRef} className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title" tabIndex={-1} onClick={(event) => event.stopPropagation()}><button type="button" className="modal-close" aria-label="Close project details" onClick={closeProject}><X size={19} /></button><div className="modal-eyebrow">PROJECT / {selectedProject.number} · {selectedProject.type}</div><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-description">{selectedProject.description}</p><p className="modal-disclaimer"><i /> VISUAL CASE STUDY / THIS PORTFOLIO DOES NOT PERFORM FACIAL RECOGNITION</p>{selectedProject.id === "facial-recognition" && <div className="case-study-switcher" role="tablist" aria-label="Project case study views"><button type="button" role="tab" aria-selected={expandedProjectSection === "overview"} className={expandedProjectSection === "overview" ? "active" : ""} onClick={() => setExpandedProjectSection("overview")}>Technical detail</button><button type="button" role="tab" aria-selected={expandedProjectSection === "pipeline"} className={expandedProjectSection === "pipeline" ? "active" : ""} onClick={() => setExpandedProjectSection("pipeline")}>System pipeline</button></div>}{selectedProject.id === "facial-recognition" && expandedProjectSection === "pipeline" ? <div className="pipeline-panel"><div className="pipeline-heading"><span>VISUAL REPRESENTATION / 001</span><small>PROCESS FLOW</small></div><div className="pipeline-list">{facialPipeline.map((step, index) => <div className="pipeline-step" key={step}><span className="pipeline-index">0{index + 1}</span><div><strong>{step}</strong><small>{index === 0 ? "Receives an image or video input." : index === 1 ? "Locates faces within the input." : index === 2 ? "Works with visual information." : index === 3 ? "Compares available reference features." : "Produces a recognition result for the project to inspect."}</small></div>{index < facialPipeline.length - 1 && <ChevronDown size={15} className="pipeline-arrow" />}</div>)}</div><p className="pipeline-note"><ScanFace size={15} /> Conceptual flow only. No live camera, recognition model, dataset, accuracy figure, or performance result is connected to this portfolio.</p></div> : <div className={`modal-detail-grid ${selectedProject.id === "facial-recognition" ? "facial-modal-grid" : ""}`}><div><small>{selectedProject.id === "facial-recognition" ? "PROJECT OVERVIEW" : "PURPOSE"}</small><p>{selectedProject.purpose}</p></div><div><small>{selectedProject.id === "facial-recognition" ? "TECHNOLOGIES USED" : "SKILLS USED"}</small><p>{selectedProject.id === "facial-recognition" ? selectedProject.technologies : selectedProject.skills}</p></div>{selectedProject.id === "facial-recognition" && <div className="modal-process"><small>HOW IT WORKS</small><ol>{selectedProject.howItWorks?.map((step, index) => <li key={step}><span>0{index + 1}</span>{step}</li>)}</ol></div>}<div><small>{selectedProject.id === "facial-recognition" ? "MY ROLE" : "TECHNOLOGIES"}</small><p>{selectedProject.id === "facial-recognition" ? selectedProject.role : selectedProject.technologies}</p></div><div><small>PROJECT STATUS</small><p>{selectedProject.status}</p></div><div className="modal-tech-block"><small>SELECT TECHNICAL TAG</small><div className="modal-tag-row">{selectedProject.tags.map((tag) => <button type="button" key={tag} className={activeProjectTag === tag ? "active" : ""} aria-pressed={activeProjectTag === tag} onClick={() => setActiveProjectTag(activeProjectTag === tag ? null : tag)}>{tag}</button>)}</div>{activeProjectTag && <p className="modal-tag-note">{technologyNotes[activeProjectTag] ?? `This project is tagged with ${activeProjectTag} as part of its documentation.`}</p>}</div></div>}<div className="modal-footer"><span>HONEST PROGRESS / NO INVENTED RESULTS</span><button type="button" className="text-link" onClick={closeProject}>Close details <X size={15} /></button></div></div></div>}
       {explorationComplete && <aside className="completion-panel" aria-live="polite"><div className="completion-mark"><Check size={16} /></div><div><span>EXPLORATION COMPLETE</span><strong>Thanks for exploring my portfolio.</strong></div><button type="button" className="text-link" onClick={() => scrollToSection("contact")}>Let’s Connect <ArrowUpRight size={15} /></button></aside>}
-      {selectedCertificate && <div className="modal-backdrop" role="presentation" onClick={closeCertificate}><div ref={certificateModalRef} className="project-modal certificate-modal" role="dialog" aria-modal="true" aria-labelledby="certificate-modal-title" tabIndex={-1} onClick={(event) => event.stopPropagation()}><button type="button" className="modal-close" aria-label="Close certificate preview" onClick={closeCertificate}><X size={19} /></button><div className="modal-eyebrow">CERTIFICATE / VERIFIED RECORD</div><h2 id="certificate-modal-title">{selectedCertificate.title}</h2><p className="modal-description">{selectedCertificate.provider} · {selectedCertificate.date}</p><div className="certificate-preview">{selectedCertificate.preview && <iframe title={`${selectedCertificate.title} certificate preview`} src={selectedCertificate.preview} />}</div><div className="modal-footer"><span>VIEWING UPLOADED CERTIFICATE</span><button type="button" className="text-link" onClick={closeCertificate}>Back to certificate list <ArrowDownRight size={15} /></button></div></div></div>}
+      {selectedCertificate && <div className="modal-backdrop" role="presentation" onClick={closeCertificate}><div ref={certificateModalRef} className="project-modal certificate-modal" role="dialog" aria-modal="true" aria-labelledby="certificate-modal-title" tabIndex={-1} onClick={(event) => event.stopPropagation()}><button type="button" className="modal-close" aria-label="Close certificate preview" onClick={closeCertificate}><X size={19} /></button><div className="modal-eyebrow">CERTIFICATE / VERIFIED RECORD</div><h2 id="certificate-modal-title">{selectedCertificate.title}</h2><p className="modal-description">{selectedCertificate.provider} · {selectedCertificate.date}</p><div className="certificate-preview">{selectedCertificate.preview ? <iframe title={`${selectedCertificate.title} certificate preview`} src={selectedCertificate.preview} /> : <div className="certificate-preview-empty"><FileText size={36} /><p>Certificate PDF preview not uploaded yet.</p><small>Drop the file into <code>client/public/certificates/</code> — see the README there for the exact filename to use.</small></div>}</div><div className="modal-footer"><span>VIEWING UPLOADED CERTIFICATE</span><button type="button" className="text-link" onClick={closeCertificate}>Back to certificate list <ArrowDownRight size={15} /></button></div></div></div>}
     </div>
   );
 }

@@ -1,49 +1,48 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Home } from "lucide-react";
-import { useLocation } from "wouter";
+import { Home, AlertTriangle } from "lucide-react";
 
+/*
+ * This page is intentionally NOT wired into the app.
+ *
+ * The portfolio is a single-page application with no client-side routing
+ * (see App.tsx) so navigation URLs stay at `/` and deep links simply use
+ * section anchors. GitHub Pages still serves a 404.html on any missed URL
+ * path, so the deploy workflow copies index.html to 404.html at build time,
+ * which recovers navigation to the portfolio even on a bad URL.
+ *
+ * This component is kept as an easy-to-drop-in fallback in the rare case
+ * someone explicitly renders it.
+ */
 export default function NotFound() {
-  const [, setLocation] = useLocation();
-
   const handleGoHome = () => {
-    setLocation("/");
+    window.location.assign("./");
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-      <Card className="w-full max-w-lg mx-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-        <CardContent className="pt-8 pb-8 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-red-100 rounded-full animate-pulse" />
-              <AlertCircle className="relative h-16 w-16 text-red-500" />
-            </div>
-          </div>
-
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">404</h1>
-
-          <h2 className="text-xl font-semibold text-slate-700 mb-4">
-            Page Not Found
-          </h2>
-
-          <p className="text-slate-600 mb-8 leading-relaxed">
-            Sorry, the page you are looking for doesn't exist.
-            <br />
-            It may have been moved or deleted.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              onClick={handleGoHome}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              <Home className="w-4 h-4 mr-2" />
-              Go Home
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen w-full flex items-center justify-center" style={{ background: "linear-gradient(180deg,#060911,#0b1320)", color: "#e6edf7" }}>
+      <div style={{
+        maxWidth: 520, padding: "48px 32px", textAlign: "center",
+        border: "1px solid rgba(79,141,255,0.18)", borderRadius: 14,
+        background: "rgba(255,255,255,0.03)",
+      }}>
+        <AlertTriangle size={40} style={{ color: "#e5b66c", marginBottom: 18, opacity: .9 }} />
+        <h1 style={{ font: "700 40px/1.1 'Space Grotesk',sans-serif", margin: "0 0 8px" }}>404</h1>
+        <h2 style={{ font: "600 18px/1.4 'DM Sans',sans-serif", margin: "0 0 16px", color: "#c8d4e6" }}>Navigation offset</h2>
+        <p style={{ font: "500 15px/1.7 'DM Sans',sans-serif", color: "#a7b3c6", margin: "0 0 28px" }}>
+          That page is not on our flight plan. Return to the main portfolio.
+        </p>
+        <button
+          type="button"
+          onClick={handleGoHome}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "10px 18px", borderRadius: 8,
+            background: "#4f8dff", color: "#fff", border: "none",
+            font: "600 14px/1 'Space Grotesk',sans-serif", cursor: "pointer",
+          }}
+        >
+          <Home size={16} /> Back to portfolio
+        </button>
+      </div>
     </div>
   );
 }

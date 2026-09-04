@@ -474,3 +474,50 @@ main > section { min-width: 0; }
 
 /* High-contrast / focus preference: iOS tap feedback removed for cleaner focus */
 :focus-visible { -webkit-tap-highlight-color: transparent; }
+
+/* ====== GITHUB PAGES: graceful empty states for assets yet to be uploaded ====== */
+
+.certificate-preview-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  padding: 56px 28px;
+  min-height: 360px;
+  border: 1px dashed color-mix(in srgb, var(--blue) 50%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--blue) 5%, transparent), transparent 80%),
+    repeating-linear-gradient(0deg, transparent 0 22px, color-mix(in srgb, var(--blue-soft) 14%, transparent) 22px 23px),
+    repeating-linear-gradient(90deg, transparent 0 22px, color-mix(in srgb, var(--blue-soft) 14%, transparent) 22px 23px),
+    var(--card);
+  color: var(--ink);
+  border-radius: 10px;
+}
+.certificate-preview-empty > p { margin: 0; font-weight: 600; }
+.certificate-preview-empty > small {
+  max-width: 520px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+}
+.certificate-preview-empty code {
+  background: var(--glass);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+}
+.certificate-preview-empty svg {
+  color: var(--blue);
+  opacity: .8;
+  margin-bottom: 4px;
+}
+
+/* Stage blueprint fallback: if user hasn't added aircraft-blueprint.png yet.
+ * `.stage-blueprint` is the <img> — if it errors and we swap in a decorative
+ * SVG-free CSS backdrop via sibling / parent classes below. Because we also
+ * rely on CSS-generated blueprint overlay (`*::before` grid pattern) in the
+ * existing design, the stage still looks like a proper engineering grid even
+ * without the PNG. */
+

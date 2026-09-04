@@ -1,24 +1,19 @@
 /*
  * Midnight Flight Deck — application shell.
- * Keep the dark theme aligned with the aerospace portfolio canvas and preserve the single-page reading flow.
+ *
+ * IMPORTANT (GitHub Pages deployment):
+ * This is a single-page portfolio. We deliberately do NOT use `wouter` history
+ * routing here because GitHub Pages serves a 404 when a non-root path is
+ * refreshed or deep-linked. The entire portfolio lives under `/` and all
+ * navigation uses in-page section anchors (`#home`, `#about`, etc.) with
+ * `scrollIntoView`. Result: the site works perfectly whether someone visits
+ * via the root URL or refreshes the page.
  */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
-
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/404" component={NotFound} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
 
 export default function App() {
   return (
@@ -26,7 +21,7 @@ export default function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <Home />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

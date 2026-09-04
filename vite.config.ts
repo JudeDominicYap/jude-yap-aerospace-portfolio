@@ -1,10 +1,14 @@
-import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+
+// Dev-only plugin imports (lazy loaded below to avoid production build errors)
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+let jsxLocPlugin: any;
+try { jsxLocPlugin = require("@builder.io/vite-plugin-jsx-loc").jsxLocPlugin; } catch { /* optional dev plugin */ }
 
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
@@ -203,10 +207,27 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+const isProd = process.env.NODE_ENV === "production";
 
+// Dev-only plugins (Manus debug/tooling, jsx locator, storage proxy) are excluded from production.
+// This keeps the production build free of IDE-only middleware that would otherwise inject dead code.
+const plugins: Plugin[] = [react(), tailwindcss()];
+if (!isProd) {
+  if (typeof jsxLocPlugin === "function") plugins.push(jsxLocPlugin());
+  try { plugins.push(vitePluginManusRuntime()); } catch { /* optional */ }
+  try { plugins.push(vitePluginManusDebugCollector()); } catch { /* optional */ }
+  try { plugins.push(vitePluginStorageProxy()); } catch { /* optional */ }
+}
+
+// GitHub Pages: we deploy a pure static build.
+//  - base = "./" so every asset path resolves RELATIVE to index.html,
+//    whether the site lives at username.github.io/ OR username.github.io/repo-name/
+//  - root = "client/" (keeps src alongside index.html)
+//  - outDir = repo-root "dist/" (flat, ready for `upload-pages-artifact`)
+//  - emptyOutDir = true
 export default defineConfig({
   plugins,
+  base: "./",
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -217,12 +238,19 @@ export default defineConfig({
   envDir: path.resolve(import.meta.dirname),
   root: path.resolve(import.meta.dirname, "client"),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
+    assetsDir: "assets",
+    sourcemap: false,
+    rollupOptions: {
+      input: {
+        main: path.resolve(import.meta.dirname, "client", "index.html"),
+      },
+    },
   },
   server: {
     port: 3000,
-    strictPort: false, // Will find next available port if 3000 is busy
+    strictPort: false,
     host: true,
     allowedHosts: [
       ".manuspre.computer",
