@@ -1,0 +1,232 @@
+/* Living Moss Grotto motion layer — visual/interaction enhancement only. */
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #79f3dc #130a05;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  background:
+    linear-gradient(90deg, #0d0704, #1a0d07 48%, #0d0704),
+    repeating-linear-gradient(0deg, transparent 0 18px, rgba(122,77,43,.12) 19px 21px, transparent 22px 36px);
+  border-left: 1px solid rgba(122,77,43,.48);
+}
+
+body::-webkit-scrollbar-thumb {
+  min-height: 72px;
+  background: linear-gradient(180deg, #8fbf65, #3f7445 52%, #24532f);
+  border: 2px solid #130a05;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(121,243,220,.16), 0 0 10px rgba(121,243,220,.22);
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #b3df7b, #5a9653 52%, #2f6940);
+  box-shadow: inset 0 0 0 1px rgba(121,243,220,.28), 0 0 16px rgba(121,243,220,.4);
+}
+
+.moss-site {
+  --scroll-y: 0;
+  --cursor-x: 50vw;
+  --cursor-y: 50vh;
+}
+
+.moss-site::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background: radial-gradient(circle 180px at var(--cursor-x) var(--cursor-y), rgba(121,243,220,.045), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+/* Floating atmospheric field. */
+.ambient-layer {
+  position: fixed;
+  inset: -8vh -4vw;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  transform: translate3d(0, calc(var(--scroll-y) * -0.028px), 0);
+  will-change: transform;
+}
+
+.ambient-layer .spore,
+.ambient-layer .pixel-leaf,
+.ambient-layer .ambient-firefly {
+  position: absolute;
+  pointer-events: none;
+}
+
+.ambient-layer .spore {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #79f3dc;
+  box-shadow: 0 0 7px rgba(121,243,220,.85), 0 0 18px rgba(121,243,220,.28);
+  opacity: .35;
+  animation: spore-drift 12s ease-in-out infinite;
+}
+
+.spore-a { left: 12%; top: 74%; animation-delay: -2s; animation-duration: 13s !important; }
+.spore-b { left: 28%; top: 61%; width: 3px !important; height: 3px !important; animation-delay: -7s; animation-duration: 10s !important; }
+.spore-c { left: 71%; top: 78%; width: 4px !important; height: 4px !important; animation-delay: -4s; animation-duration: 15s !important; }
+.spore-d { left: 86%; top: 47%; width: 3px !important; height: 3px !important; animation-delay: -9s; animation-duration: 11s !important; }
+.spore-e { left: 43%; top: 88%; width: 4px !important; height: 4px !important; animation-delay: -6s; animation-duration: 14s !important; }
+.spore-f { left: 57%; top: 55%; width: 3px !important; height: 3px !important; animation-delay: -11s; animation-duration: 12s !important; }
+.spore-g { left: 91%; top: 82%; width: 4px !important; height: 4px !important; animation-delay: -1s; animation-duration: 17s !important; }
+.spore-h { left: 6%; top: 39%; width: 3px !important; height: 3px !important; animation-delay: -8s; animation-duration: 11.5s !important; }
+
+.ambient-firefly {
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: #f7d98d;
+  box-shadow: 0 0 6px rgba(247,217,141,.95), 0 0 20px rgba(247,217,141,.45);
+  animation: firefly-drift 9s ease-in-out infinite;
+}
+
+.firefly-a { left: 18%; top: 31%; animation-delay: -3s; }
+.firefly-b { left: 37%; top: 72%; animation-delay: -7s; animation-duration: 12s; }
+.firefly-c { left: 64%; top: 39%; animation-delay: -1s; animation-duration: 10s; }
+.firefly-d { left: 82%; top: 68%; animation-delay: -6s; animation-duration: 14s; }
+.firefly-e { left: 52%; top: 22%; animation-delay: -4.5s; animation-duration: 11s; }
+
+@keyframes spore-drift {
+  0%, 100% { transform: translate3d(0, 18px, 0) scale(.72); opacity: .12; }
+  18% { transform: translate3d(13px, -8vh, 0) scale(1); opacity: .48; }
+  44% { transform: translate3d(-16px, -18vh, 0) scale(.86); opacity: .26; }
+  72% { transform: translate3d(20px, -30vh, 0) scale(1.05); opacity: .52; }
+}
+
+@keyframes firefly-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(.65); opacity: .12; }
+  25% { transform: translate3d(26px, -18px, 0) scale(1); opacity: .8; }
+  52% { transform: translate3d(-18px, -42px, 0) scale(.78); opacity: .34; }
+  78% { transform: translate3d(10px, 8px, 0) scale(1.15); opacity: .72; }
+}
+
+/* Drifting pixel leaves: slow, irregular, and intentionally sparse. */
+.ambient-layer .pixel-leaf {
+  opacity: .42;
+  transform-origin: center;
+  animation: leaf-drift 18s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(121,243,220,.12));
+}
+
+.leaf-a { left: 8%; top: -8%; animation-delay: -5s; animation-duration: 21s !important; }
+.leaf-b { left: 32%; top: -16%; animation-delay: -13s; animation-duration: 26s !important; }
+.leaf-c { left: 67%; top: -10%; animation-delay: -8s; animation-duration: 23s !important; }
+.leaf-d { left: 89%; top: -18%; animation-delay: -17s; animation-duration: 28s !important; }
+
+@keyframes leaf-drift {
+  0% { transform: translate3d(0, -8vh, 0) rotate(-18deg); opacity: 0; }
+  12% { opacity: .44; }
+  38% { transform: translate3d(7vw, 36vh, 0) rotate(68deg); }
+  62% { transform: translate3d(-4vw, 72vh, 0) rotate(156deg); }
+  82% { opacity: .28; }
+  100% { transform: translate3d(9vw, 122vh, 0) rotate(248deg); opacity: 0; }
+}
+
+/* Cursor-bound bioluminescent sprite with eased trailing motion. */
+.cursor-fairy {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  z-index: 60;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, #d7fff3 0 12%, #79f3dc 28%, rgba(121,243,220,.32) 58%, transparent 72%);
+  box-shadow: 0 0 10px rgba(121,243,220,.75), 0 0 28px rgba(121,243,220,.3), 0 0 50px rgba(144,220,255,.14);
+  transform: translate3d(-50%, -50%, 0) scale(.95);
+  mix-blend-mode: screen;
+  transition: opacity .2s ease, scale .2s ease;
+}
+
+.cursor-fairy::before,
+.cursor-fairy::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: #f7d98d;
+  box-shadow: 0 0 8px rgba(247,217,141,.95);
+  animation: fairy-pulse 2.2s ease-in-out infinite;
+}
+
+.cursor-fairy::after {
+  inset: -5px;
+  border: 1px solid rgba(121,243,220,.17);
+  background: transparent;
+  border-radius: 50%;
+  animation-delay: -.8s;
+}
+
+@keyframes fairy-pulse {
+  0%, 100% { transform: scale(.7); opacity: .52; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Cursor light subtly follows interactive surfaces. */
+.project-entry,
+.value-card,
+.contact-links a,
+.moss-button {
+  --surface-glow-x: 50%;
+  --surface-glow-y: 50%;
+}
+
+.project-entry:hover,
+.value-card:hover,
+.contact-links a:hover,
+.moss-button:hover {
+  background-image: radial-gradient(circle 120px at var(--cursor-x) var(--cursor-y), rgba(121,243,220,.085), transparent 70%), var(--existing-surface, none);
+}
+
+/* Scroll-created depth: foreground cards stay grounded while ambient layers drift. */
+.grove-hero .hero-illustration,
+.project-entry .project-vine,
+.trail-map .trail-line {
+  will-change: transform;
+}
+
+.grove-hero .hero-illustration {
+  transform: translate3d(0, calc(var(--scroll-y) * -0.012px), 0);
+}
+
+.project-entry .project-vine {
+  margin-top: calc(var(--scroll-y) * -0.004px);
+}
+
+.trail-map .trail-line {
+  transform: translate3d(0, calc(var(--scroll-y) * -0.008px), 0);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-fairy { display: none; }
+  .moss-site::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ambient-layer,
+  .ambient-layer .spore,
+  .ambient-layer .pixel-leaf,
+  .ambient-layer .ambient-firefly,
+  .cursor-fairy,
+  .grove-hero .hero-illustration,
+  .project-entry .project-vine,
+  .trail-map .trail-line { animation: none !important; transform: none !important; }
+  .moss-site::before { display: none; }
+}
