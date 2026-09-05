@@ -1,33 +1,18 @@
 /* Hollow Knight Grub cursor follower using the supplied crawl sprite. */
 .cursor-fairy {
-  width: 48px !important;
-  height: 48px !important;
-  margin-left: 24px;
+  width: 44px !important;
+  height: 49px !important;
+  margin-left: 22px;
   margin-top: 2px;
   border-radius: 0 !important;
   background-image: url('./grub-crawl-strip.png') !important;
   background-repeat: no-repeat !important;
   background-position: 0 0 !important;
-  background-size: 48px auto !important;
+  background-size: 1320px 110px !important;
+  background-size: 616px 49px !important;
   background-color: transparent !important;
   box-shadow: none !important;
   filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.42));
-  mix-blend-mode: normal !important;
-  opacity: 0.98;
-  image-rendering: pixelated;
-  will-change: transform, background-position, margin-top;
-  transition: filter 120ms ease, opacity 120ms ease;
-  animation: grub-crawl 0.8s steps(8) infinite;
-}
-
-@keyframes grub-crawl {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 0 -384px;
-  }
-}
   mix-blend-mode: normal !important;
   opacity: 0.98;
   image-rendering: pixelated;
