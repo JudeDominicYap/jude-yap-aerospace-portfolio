@@ -1,0 +1,61 @@
+/* Grub cursor follower — uses the supplied raw Hollow Knight Grub crawl strip verbatim. */
+
+.cursor-fairy {
+  width: 44px !important;
+  height: 49px !important;
+  margin-left: 22px;
+  margin-top: 3px;
+  border-radius: 0 !important;
+  background-image: url('./grub-crawl-strip.png') !important;
+  background-repeat: no-repeat !important;
+  background-position: 0 0 !important;
+  background-size: 660px 49px !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.42));
+  mix-blend-mode: normal !important;
+  opacity: 0.98;
+  image-rendering: pixelated;
+  will-change: transform, background-position;
+  animation: grub-crawl 1.05s steps(14, end) infinite;
+}
+
+.cursor-fairy::before,
+.cursor-fairy::after {
+  content: none !important;
+  display: none !important;
+}
+
+@keyframes grub-crawl {
+  from { background-position: 0 0; }
+  to { background-position: -616px 0; }
+}
+
+/* A small reaction while the pointer is over an interactive surface. */
+.moss-site:has(.project-entry:hover) .cursor-fairy,
+.moss-site:has(.value-card:hover) .cursor-fairy,
+.moss-site:has(.certificate-card:hover) .cursor-fairy,
+.moss-site:has(.direction-card:hover) .cursor-fairy,
+.moss-site:has(.contact-links a:hover) .cursor-fairy,
+.moss-site:has(.moss-button:hover) .cursor-fairy,
+.moss-site:has(button:hover) .cursor-fairy {
+  animation:
+    grub-crawl 0.78s steps(14, end) infinite,
+    grub-happy-bounce 0.48s ease-in-out infinite alternate;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.42));
+}
+
+@keyframes grub-happy-bounce {
+  from { margin-top: 3px; }
+  to { margin-top: -2px; }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-fairy { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-fairy {
+    animation: none !important;
+  }
+}
