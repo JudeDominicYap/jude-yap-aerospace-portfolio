@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import MossGrotto from "./pages/MossGrotto";
+import AerospacePortfolio from "./pages/AerospacePortfolio";
 
 export default function App() {
   return (
@@ -10,7 +10,7 @@ export default function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
-          <MossGrotto />
+          <AerospacePortfolio />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
