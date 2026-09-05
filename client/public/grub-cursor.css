@@ -17,11 +17,10 @@
   image-rendering: pixelated;
   will-change: transform, background-position, margin-top;
   transition: filter 120ms ease, opacity 120ms ease;
-  animation: none;
+  animation: grub-crawl 0.78s steps(14, end) infinite;
 }
 .cursor-fairy::before,
 .cursor-fairy::after { content: none !important; display: none !important; }
-.cursor-fairy.is-moving { animation: grub-crawl 0.78s steps(14, end) infinite; }
 @keyframes grub-crawl {
   from { background-position: 0 0; }
   to { background-position: -616px 0; }
