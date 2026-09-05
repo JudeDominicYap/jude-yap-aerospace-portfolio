@@ -16,13 +16,12 @@ import {
   Mountain,
   ScanFace,
   Sprout,
-  TerminalSquare,
   X,
 } from "lucide-react";
 import "../moss-grotto.css";
 
 const BOOT_LINES = [
-  "FIELD JOURNAL / MOSS GROTTО",
+  "FIELD JOURNAL / MOSS GROTTO",
   "Waking the forest map...",
   "Reading project notes...",
   "Loading verified credentials...",
@@ -36,10 +35,8 @@ const PROJECTS = [
     title: "Automated Facial Recognition System",
     type: "PYTHON / COMPUTER VISION / AI",
     icon: ScanFace,
-    summary:
-      "A Python-based project exploring automated facial recognition, visual input, image processing, and AI concepts.",
-    detail:
-      "The repository describes this as a student technical project focused on learning how software can process visual information and produce a recognition result. The portfolio intentionally avoids claiming production accuracy or deployment results that are not documented.",
+    summary: "A Python-based project exploring automated facial recognition, visual input, image processing, and AI concepts.",
+    detail: "The repository describes this as a student technical project focused on learning how software can process visual information and produce a recognition result. The portfolio intentionally avoids claiming production accuracy or deployment results that are not documented.",
     tags: ["Python", "Computer Vision", "Artificial Intelligence", "Image Processing", "Automation"],
   },
   {
@@ -48,58 +45,24 @@ const PROJECTS = [
     title: "Personal Portfolio Website",
     type: "WEB / DOCUMENTATION",
     icon: Mountain,
-    summary:
-      "A responsive portfolio built to document projects, skills, interests, learning, and preparation for future engineering study.",
-    detail:
-      "The site is designed as a static GitHub Pages experience with responsive layout, interactive UI, and content grounded in the project repository rather than invented accomplishments.",
+    summary: "A responsive portfolio built to document projects, skills, interests, learning, and preparation for future engineering study.",
+    detail: "The site is designed as a static GitHub Pages experience with responsive layout, interactive UI, and content grounded in the project repository rather than invented accomplishments.",
     tags: ["HTML", "CSS", "JavaScript", "React"],
   },
 ];
 
 const CERTIFICATES = [
-  {
-    title: "Python Essentials 1",
-    provider: "Networking Academy · Cisco Networking Academy",
-    date: "09 Aug 2026",
-  },
-  {
-    title: "Claude Projects Artifacts",
-    provider: "FreeAcademy.ai",
-    date: "21 Aug 2026",
-  },
-  {
-    title: "Prompt Engineering Essentials",
-    provider: "FreeAcademy.ai",
-    date: "21 Aug 2026",
-  },
-  {
-    title: "Introduction to Modern AI",
-    provider: "DICT-ITU DTC Initiative · Cisco Networking Academy",
-    date: "30 Jul 2025",
-  },
+  { title: "Python Essentials 1", provider: "Networking Academy · Cisco Networking Academy", date: "09 Aug 2026" },
+  { title: "Claude Projects Artifacts", provider: "FreeAcademy.ai", date: "21 Aug 2026" },
+  { title: "Prompt Engineering Essentials", provider: "FreeAcademy.ai", date: "21 Aug 2026" },
+  { title: "Introduction to Modern AI", provider: "DICT-ITU DTC Initiative · Cisco Networking Academy", date: "30 Jul 2025" },
 ];
 
 const CONTRIBUTIONS = [
-  {
-    title: "Prototype with Python",
-    icon: Code2,
-    body: "I can turn a small technical idea into a Python script or student-scale prototype, then iterate as the problem becomes clearer.",
-  },
-  {
-    title: "Explore AI & Computer Vision",
-    icon: BrainCircuit,
-    body: "I can contribute to early-stage AI and computer-vision work by building, testing, documenting, and reviewing the steps behind a system.",
-  },
-  {
-    title: "Research & Organize",
-    icon: BookOpen,
-    body: "I can help break a large question into smaller tasks, organize technical information, and document what was tested and learned.",
-  },
-  {
-    title: "Build Clear Web Interfaces",
-    icon: Sprout,
-    body: "I can build and customize responsive frontend pages with HTML, CSS, JavaScript, and React for project documentation and presentations.",
-  },
+  { title: "Prototype with Python", icon: Code2, body: "I can turn a small technical idea into a Python script or student-scale prototype, then iterate as the problem becomes clearer." },
+  { title: "Explore AI & Computer Vision", icon: BrainCircuit, body: "I can contribute to early-stage AI and computer-vision work by building, testing, documenting, and reviewing the steps behind a system." },
+  { title: "Research & Organize", icon: BookOpen, body: "I can help break a large question into smaller tasks, organize technical information, and document what was tested and learned." },
+  { title: "Build Clear Web Interfaces", icon: Sprout, body: "I can build and customize responsive frontend pages with HTML, CSS, JavaScript, and React for project documentation and presentations." },
 ];
 
 const NAV = [
@@ -172,6 +135,7 @@ export default function MossGrotto() {
   }, []);
 
   const coord = useMemo(() => `${mouse.x.toString().padStart(2, "0")}:${mouse.y.toString().padStart(2, "0")}`, [mouse]);
+  const ActiveProjectIcon = activeProject?.icon;
 
   return (
     <div className={`moss-site mood-${mood}`}>
@@ -218,9 +182,7 @@ export default function MossGrotto() {
 
         <div className="nav-tools">
           <span className="coord-readout">MAP {coord}</span>
-          <button className="mood-toggle" onClick={() => setMood((value) => (value + 1) % 3)} aria-label="Change atmosphere">
-            <Sprout size={15} />
-          </button>
+          <button className="mood-toggle" onClick={() => setMood((value) => (value + 1) % 3)} aria-label="Change atmosphere"><Sprout size={15} /></button>
           <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-label="Toggle navigation">
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -264,7 +226,6 @@ export default function MossGrotto() {
             <h2>Field notes from the <em>workbench.</em></h2>
             <p>Projects currently represented in the repository, presented without inflated claims.</p>
           </div>
-
           <div className="project-list">
             {PROJECTS.map((project) => {
               const Icon = project.icon;
@@ -294,7 +255,6 @@ export default function MossGrotto() {
             </div>
             <p>Practical value based on the skills and projects already documented in the repository: building small things, learning fast, and making technical work easier to follow.</p>
           </div>
-
           <div className="value-grid">
             {CONTRIBUTIONS.map((item, index) => {
               const Icon = item.icon;
@@ -320,11 +280,10 @@ export default function MossGrotto() {
             </div>
             <p>Credentials and direction recorded from the repository. A credential is shown only when it is actually documented.</p>
           </div>
-
           <div className="learning-layout">
             <div className="trail-map">
               <div className="trail-line" />
-              {CERTIFICATES.map((certificate, index) => (
+              {CERTIFICATES.map((certificate) => (
                 <article className="certificate-card" key={certificate.title}>
                   <span className="trail-dot"><CheckCircle2 size={12} /></span>
                   <div>
@@ -335,7 +294,6 @@ export default function MossGrotto() {
                 </article>
               ))}
             </div>
-
             <aside className="direction-card">
               <div className="direction-orb"><Sprout size={34} /></div>
               <span className="section-index">FUTURE DIRECTION</span>
@@ -368,11 +326,11 @@ export default function MossGrotto() {
         <span>GITHUB PAGES / STATIC</span>
       </footer>
 
-      {activeProject && (
+      {activeProject && ActiveProjectIcon && (
         <div className="moss-modal-backdrop" onClick={() => setActiveProject(null)} role="presentation">
           <section className="moss-modal" role="dialog" aria-modal="true" aria-labelledby="project-title" onClick={(event) => event.stopPropagation()}>
             <div className="modal-top"><span>FIELD NOTE / PROJECT {activeProject.code}</span><button onClick={() => setActiveProject(null)} aria-label="Close project"><X size={20} /></button></div>
-            <div className="modal-icon"><activeProject.icon size={25} /></div>
+            <div className="modal-icon"><ActiveProjectIcon size={25} /></div>
             <span className="project-type">{activeProject.type}</span>
             <h2 id="project-title">{activeProject.title}</h2>
             <p>{activeProject.detail}</p>
