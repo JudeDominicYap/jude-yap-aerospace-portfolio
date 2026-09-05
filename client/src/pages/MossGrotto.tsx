@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import "../moss-grotto.css";
 import "../moss-richness.css";
+import "../moss-motion.css";
 
 const BOOT_LINES = [
   "FIELD JOURNAL / MOSS GROTTO",
@@ -123,6 +124,11 @@ export default function MossGrotto() {
   const [activeNav, setActiveNav] = useState("home");
   const [mood, setMood] = useState(0);
   const [mouse, setMouse] = useState({ x: 50, y: 50 });
+  const siteRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const pointerTarget = useRef({ x: 0, y: 0 });
+  const pointerCurrent = useRef({ x: 0, y: 0 });
+  const pointerStarted = useRef(false);
 
   useEffect(() => {
     if (!booting) return;
@@ -141,13 +147,46 @@ export default function MossGrotto() {
 
   useEffect(() => {
     const onMove = (event: MouseEvent) => {
+      pointerTarget.current = { x: event.clientX, y: event.clientY };
+      if (!pointerStarted.current) {
+        pointerCurrent.current = { x: event.clientX, y: event.clientY };
+        pointerStarted.current = true;
+      }
       setMouse({
         x: Math.round((event.clientX / Math.max(window.innerWidth, 1)) * 100),
         y: Math.round((event.clientY / Math.max(window.innerHeight, 1)) * 100),
       });
     };
     window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
+
+    let frame = 0;
+    const tick = () => {
+      const current = pointerCurrent.current;
+      const target = pointerTarget.current;
+      current.x += (target.x - current.x) * 0.12;
+      current.y += (target.y - current.y) * 0.12;
+      siteRef.current?.style.setProperty("--cursor-x", `${current.x}px`);
+      siteRef.current?.style.setProperty("--cursor-y", `${current.y}px`);
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${current.x}px, ${current.y}px, 0) translate(-50%, -50%)`;
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateScroll = () => {
+      siteRef.current?.style.setProperty("--scroll-y", `${window.scrollY}`);
+    };
+    updateScroll();
+    window.addEventListener("scroll", updateScroll, { passive: true });
+    return () => window.removeEventListener("scroll", updateScroll);
   }, []);
 
   useEffect(() => {
@@ -170,7 +209,7 @@ export default function MossGrotto() {
   const coord = useMemo(() => `${mouse.x.toString().padStart(2, "0")}:${mouse.y.toString().padStart(2, "0")}`, [mouse]);
 
   return (
-    <div className={`moss-site mood-${mood}`}>
+    <div ref={siteRef} className={`moss-site mood-${mood}`}>
       <div className="ambient-layer" aria-hidden="true">
         <PixelLeaf className="leaf-a" />
         <PixelLeaf className="leaf-b" />
@@ -180,7 +219,18 @@ export default function MossGrotto() {
         <span className="spore spore-b" />
         <span className="spore spore-c" />
         <span className="spore spore-d" />
+        <span className="spore spore-e" />
+        <span className="spore spore-f" />
+        <span className="spore spore-g" />
+        <span className="spore spore-h" />
+        <span className="ambient-firefly firefly-a" />
+        <span className="ambient-firefly firefly-b" />
+        <span className="ambient-firefly firefly-c" />
+        <span className="ambient-firefly firefly-d" />
+        <span className="ambient-firefly firefly-e" />
       </div>
+
+      <div ref={cursorRef} className="cursor-fairy" aria-hidden="true" />
 
       {booting && (
         <div className="moss-boot" role="status" aria-live="polite">
